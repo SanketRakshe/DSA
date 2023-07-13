@@ -33,7 +33,7 @@ public:
 			num/=10;
 		}
 		sort(temp.begin(), temp.end());
-		int num1 = temp[0]  * 10 + temp[2];
+		int num1 = temp[0]  * 10 + temp[2]; // Multiplyed by 10 to form a number again
 		int num2 = temp[1]  * 10 + temp[3];
 		return num1 + num2;
 	}
