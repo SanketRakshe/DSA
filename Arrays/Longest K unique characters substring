@@ -1,0 +1,75 @@
+/*
+Given a string you need to return the size of the longest possible substring that has exactly K unique characters. If there is no possible substring then print -1.
+
+Example 1:
+
+Input: s = "aabacbebebe", k = 3 
+Output: 7
+Explanation: "cbebebe" is the longest substring with K distinct characters.
+Example 2:
+
+Input: s = "aaaa", k = 2 
+Output: -1
+Explanation: There's no substring with K distinct characters.
+Constraints:
+
+1 ≤ |S| ≤ 
+1
+0
+5
+10 
+5
+ 
+1 ≤ K ≤ 
+26
+26
+All characters are lowercase latin characters.
+*/
+
+//Code:
+
+class Solution {
+public:
+	int longestKSubstr(string s, int k) {
+		unordered_map<char, int> m;
+        int unique = 0, i = 0, j = 0, res = 0, n = s.length();
+
+        while(j < n) {
+            //Sliding jth pointer till we get valid substring
+            while(j < n) {
+                if(m[s[j]] == 0) unique++;
+
+                m[s[j]]++;
+
+                //if the number of unique chars increases k, then stop
+                if(unique > k) break;
+
+                j++;
+            }
+
+            //Check unique chars are equal to k or k + 1
+            if(unique >= k) res = max(res, j - i);
+
+            if(j == n) break;
+
+            //sliding the ith pointer till we get the k unique chas in the substring
+            while(i < n) {
+                if(m[s[i]] == 1) unique--;
+                m[s[i]]--;
+
+                if(unique == k) break;
+                i++;
+            }
+
+            i++;
+            j++;
+        }
+        if(res == 0) return -1;
+
+        return res;
+
+        //Time Complexity: O(n) , just iterating over the array .
+
+        //Space Complexity: O(26) To maintain the frequency of elements for the window size.
+	}
+};
