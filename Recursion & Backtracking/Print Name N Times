@@ -1,0 +1,17 @@
+#include<iostream>
+using namespace std;
+
+void Print(int n) {
+    if(n==0) return ;       //Base case
+    
+    cout<<"Sanket"<<endl;
+    Print(n-1);
+}
+int main() {
+    int n;
+    cout<<"How many times do you want to print the Name: " <<endl;
+    cin>>n;
+    Print(n);
+
+    return 0;
+}
