@@ -1,0 +1,35 @@
+arr[] = [1 2 1]
+output = 2
+
+Code:
+
+#include<bits/stdc++.h>
+using namespace std;
+int PrintS(int ind, int n, int s, int sum, int arr[]) {
+    //Base case
+    if(ind == n) {
+        //Condition Satisfied
+        if(s == sum) {
+            return 1;
+        }
+        //Condition not satisfied
+        else return 0;
+    }
+    //Element take case:
+    s += arr[ind];
+
+    int l = PrintS(ind+1, n, s, sum, arr);
+
+    s-=arr[ind];
+    //Element no take case:
+    int r = PrintS(ind+1, n, s, sum, arr);
+
+    return l + r;
+}
+int main() {
+    int arr[3] = {1, 2, 1};
+    int n = 3;
+    int sum = 2;
+    cout<<PrintS(0, n, 0, sum, arr);
+    return 0;
+}
