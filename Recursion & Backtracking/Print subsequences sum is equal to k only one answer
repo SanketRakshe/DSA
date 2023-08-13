@@ -1,0 +1,42 @@
+arr[] = [1 2 1]
+output = 1 1
+
+Code:
+
+#include<bits/stdc++.h>
+using namespace std;
+bool PrintS(int ind, int n, int s, int sum, vector<int> &ds,  int arr[]) {
+    //Base case
+    if(ind == n) {
+        //Condition Satisfied
+        if(s == sum) {
+            for(auto it: ds) {
+                cout<<it<<" ";
+            }
+            cout<<endl;
+            return true;
+        }
+        //Condition not satisfied
+        else return false;
+    }
+    //Element take case:
+    ds.push_back(arr[ind]);
+    s += arr[ind];
+
+    if(PrintS(ind+1, n, s, sum, ds, arr) == true) return true;
+
+    s-=arr[ind];
+    ds.pop_back();
+    //Element no take case:
+    if(PrintS(ind+1, n, s, sum, ds, arr) == true) return true;
+
+    return false;
+}
+int main() {
+    int arr[3] = {1, 2, 1};
+    int n = 3;
+    int sum = 2;
+    vector<int>ds;
+    PrintS(0, n, 0, sum, ds, arr);
+    return 0;
+}
