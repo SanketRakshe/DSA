@@ -41,8 +41,8 @@ int main() {
 
 /*
 Time Complexity:
-Worst Case = O(N*N)
-Best Case = O(n*N)
+Worst Case = O(N2)
+Best Case = O(N2)
 Avg Case = O(N)
 
 Space Complexity = O(1)
