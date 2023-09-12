@@ -1,0 +1,144 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+        Node* next;
+
+        //Constructor
+        Node(int data) {
+            this -> data = data;
+            this -> next = NULL;
+        }
+
+        //Destructor
+        ~Node(){
+            int value = this -> data;
+            if(this -> next != NULL) {
+                delete next;
+                this -> next = NULL;
+            }
+            cout << " memory is free for node with data " << value << endl;
+        }
+
+
+};
+
+//Insertion at head position
+void insertAtHead(Node* &head, int data) {
+    Node* temp = new Node(data);
+    temp -> next = head;
+    head = temp;
+    cout<<"Done"<<endl;
+}
+
+//inseertion at tail
+void insertAtEnd(Node* &tail, int data) {
+    Node* temp = new Node(data);
+    tail -> next = temp;
+    tail = temp;
+}
+
+//insertion at given position
+void insertAtPosition(Node* &head, Node* &tail, int position, int data) {
+    //inssertion at first position
+    if(position == 1) {
+        insertAtHead(head, data);
+        return ;
+    }
+
+    int count = 1;
+    Node* temp = head;
+    while(count < position-1) {
+        temp = temp -> next;
+        count++;
+    }
+
+    //insertion at last position
+    if(temp -> next == NULL) {
+        insertAtEnd(tail, data);
+    }
+
+    //Create a new Node for data
+    Node* NodeToInsert = new Node(data);
+    NodeToInsert -> next = temp -> next;
+    temp -> next = NodeToInsert;
+
+}
+
+//Deleting nodes into the linked list
+void deleteAtPosition(Node* &head, int position) {
+    //Deleting first node in linked list
+    Node* temp = head;
+
+    if(position == 1) {
+        head = head -> next;
+        temp -> next = NULL;
+        delete temp;
+    }
+    else {
+        //Delete any middle or last node in linked list
+        Node* curr = head;
+        Node* prev = NULL;
+        int count = 1;
+
+        while(count < position) {
+            prev = curr;
+            curr = curr -> next;
+            count++;
+        }
+        prev -> next = curr -> next;
+        curr -> next = NULL;
+        delete curr;
+    }
+}
+
+void Print(Node* &head) {
+    Node* temp = head;
+    while(temp != NULL) {
+        cout<< temp -> data<<" ";
+        temp = temp -> next;
+    }
+    cout<<endl;
+}
+
+int main() {
+    
+    //Creation of New Nodes
+    Node* Node1 = new Node(10);
+    Node* head = Node1;
+    Node* tail = Node1;
+
+    Print(head);
+
+    //Inserting Node at head of linked list
+    insertAtHead(head, 20);
+    //Print(head);
+
+    //inserting node at end of the linked list
+    insertAtEnd(tail, 30);
+    //Print(head);
+
+    //Inserting a Node at given position in linked list
+    //insertAtPosition(head, tail, 2, 40);
+    //Print(head);
+
+    //insertAtPosition(head, tail, 4, 50);
+    //Print(head);
+
+    insertAtPosition(head, tail, 1, 60);
+    Print(head);
+
+    insertAtPosition(head, tail, 4, 609);
+    Print(head);
+
+    cout<<"Head :"<< head -> data <<endl;
+    cout<<"Tail :"<< tail -> data <<endl;
+
+    deleteAtPosition(head, 5);
+    Print(head);
+
+
+    return 0;
+}
