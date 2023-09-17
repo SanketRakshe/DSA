@@ -1,0 +1,235 @@
+#include<iostream>
+#include<map>
+using namespace std;
+
+class Node {
+    public:
+    int data;
+    Node* next;
+
+    Node(int d) {
+        this -> data = d;
+        this -> next = NULL;
+    }
+
+    ~Node() {
+        int value = this -> data;
+
+        if(this -> next != NULL){
+            delete next;
+            next = NULL;
+        }
+        cout << "memory free for node with data "<< value << endl;
+    }
+};
+
+//Insertion in Linked List
+void insertNode(Node* &tail, int element, int d) {
+    //In case of empty Linked list
+    if(tail == NULL) {
+        Node* NewNode = new Node(d);
+        tail = NewNode;
+        NewNode -> next = NewNode;
+    }
+    else {
+        //Non-empty list
+        //Assume that element are present in the Linked List
+        Node* curr = tail;
+
+        while(curr -> data != element) {
+            curr = curr -> next;
+        }
+        Node* temp = new Node(d);
+        temp -> next = curr -> next;
+        curr -> next = temp;
+    }
+}
+
+//Traversing the Linked List
+void Print(Node* tail) {
+    
+    Node* temp = tail;
+    //empty list
+    if(tail == NULL) {
+        cout<<"Linked list are empty.."<<endl;
+        return;
+    }
+
+    do {
+        cout<< tail -> data << " ";
+        tail = tail -> next;
+    }while(tail != temp);
+
+    cout<<endl;
+}
+
+//Deletion in Linked List
+
+void deleteNode(Node* &tail, int element) {
+    if(tail == NULL) {
+        //empty list
+        cout<<"Linked list is empty.."<<endl;
+        return;
+    }
+    else {
+        //Assuming the element are present in LL
+        Node* prev = tail;
+        Node* curr = prev -> next;
+
+        while(curr -> data != element) {
+            prev = curr;
+            curr = curr -> next;
+        }
+
+        prev -> next = curr -> next;
+
+        //1 Node LL
+        if(curr == prev) {
+            tail = NULL;
+        }
+        //Nodes are >=2
+        else if(tail == curr) {
+            tail = prev;
+        }
+
+        curr -> next = NULL;
+
+        delete curr;
+    }
+}
+
+bool isCircular(Node* head) {
+
+    //check empty or not
+    if( head == NULL ) {
+        return true;
+    } 
+
+    Node* temp = head -> next;
+    while( temp != NULL && temp != head) {
+        temp = temp -> next;
+    }
+
+    if( temp == head) {
+        return true;
+    }
+    return false;
+}
+
+bool detectloop(Node* head) {
+    if( head == NULL)
+        return NULL;
+
+    Node* temp = head;
+
+    map<Node*, bool> visited;
+
+    while(temp != NULL) {
+        
+        visited[temp] = true;
+        if( visited[temp] == true ) {
+            return true;
+        }
+        temp = temp -> next;
+    }
+    return false;
+}
+
+Node* FloydsLoopDetection(Node* head) {
+
+    if( head == NULL ) {
+        return NULL;
+    }
+
+    Node* slow = head;
+    Node* fast = head;
+
+    while( slow != NULL && fast != NULL ) {
+        
+        fast = fast -> next;
+        if(fast != NULL ) {
+            fast = fast -> next;
+        }
+        slow = slow -> next;
+
+        if(slow == fast) {
+            return slow;
+        }
+    }
+    return NULL;
+}
+
+Node* getStartingNode(Node* head) {
+
+    if(head == NULL){
+        return NULL;
+    }
+    Node* intersection = FloydsLoopDetection(head);
+
+    if(intersection == NULL) {
+        return NULL;
+    }
+
+    Node* slow = head;
+
+    while(slow != intersection) {
+        slow = slow -> next;
+        intersection = intersection -> next;
+    }
+    return slow;
+}
+
+void RemoveLoop(Node* head) {
+
+    if(head == NULL){
+        return;
+    }
+    Node* intersection = getStartingNode(head);
+
+    Node* temp = intersection;
+
+    while(temp -> next != intersection) {
+        temp = temp -> next;
+    }
+    temp -> next = NULL;
+}
+
+int main() {
+
+    Node* tail = NULL;
+
+    insertNode(tail, 5, 10);
+
+    insertNode(tail, 10, 20);
+
+    insertNode(tail, 20, 30);
+
+    insertNode(tail, 30, 40);
+    Print(tail);
+
+    //deleteNode(tail, 40);
+    //Print(tail);
+
+    if(isCircular(tail)){
+        cout<<"Linkde List are circular in nature.."<<endl;
+    }
+    else {
+        cout<<" Linkde List are not circular in nature.."<<endl;
+    }
+
+    /*if(FloydsLoopDetection(tail)) {
+        cout<<"Loop is present.."<<endl;
+    }
+    else {
+        cout<<"Loop Absent.."<<endl;
+    }*/
+
+    Node* temp = getStartingNode(tail);
+    cout<<"Starting Node of Node: "<< tail -> data <<endl;
+
+    RemoveLoop(tail);
+
+    Print(tail);
+
+    return 0;
+}
