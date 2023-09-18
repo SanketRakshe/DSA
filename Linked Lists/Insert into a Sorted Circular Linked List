@@ -1,0 +1,108 @@
+Given a Circular Linked List node, which is sorted in non-descending order, write a function to insert a value insertVal into the list such that it remains a sorted circular list. 
+The given node can be a reference to any single node in the list and may not necessarily be the smallest value in the circular list.
+If there are multiple suitable places for insertion, you may choose any place to insert the new value. After the insertion, the circular list should remain sorted.
+If the list is empty (i.e., the given node is null), you should create a new single circular list and return the reference to that single node. 
+Otherwise, you should return the originally given node.
+
+Example 1:
+
+Input: head = [3,4,1], insertVal = 2 
+Output: [3, 4, 1, 2]
+Explanation: ![](https://assets.nextleap.app/images/example_1_before_65p-e075b74d-910d-40e6-bbc0-78edde410122.jpg)In the figure above, there is a sorted circular list of three elements. You are given a reference to the node with value 3, and we need to insert 2 into the list. The new node should be inserted between node 1 and node 3. After the insertion, the list should look like this, and we should still return node 3.
+
+![](https://assets.nextleap.app/images/example_1_after_65p-a5e1568a-37e7-4044-bd86-4ec1b8bcc16c.jpg)
+Example 2:
+
+Input: head = [1], insertVal = 2 
+Output: [1, 2]
+Explanation: The list is empty (given head is null). We create a new single circular list and return the reference to that single node.
+Constraints:
+
+The number of nodes in the list is in the range [0, 
+5
+∗
+1
+0
+4
+5∗10 
+4
+ ].
+-
+1
+0
+6
+10 
+6
+  <= Node.val, insertVal <= 
+1
+0
+6
+10 
+6
+
+
+Code:
+-----
+
+/*
+class SinglyLinkedListNode {
+    public:
+        int data;
+        SinglyLinkedListNode* next;
+
+        SinglyLinkedListNode() {
+            this->data = 0;
+            this->next = NULL;
+        }
+
+        SinglyLinkedListNode(int data) {
+            this->data = data;
+            this->next = NULL;
+        }
+
+        SinglyLinkedListNode(int data, SinglyLinkedListNode* next) {
+            this->data = data;
+            this->next = next;
+        }
+};*/
+
+class Solution {
+public:
+	SinglyLinkedListNode*  insert(SinglyLinkedListNode* & head, int insertVal) {
+		if (head == nullptr) {
+            // Create a new node for an empty list
+            SinglyLinkedListNode* newNode = new SinglyLinkedListNode(insertVal);
+            newNode->next = newNode; // Circular reference to itself
+            return newNode;
+        }
+        
+        SinglyLinkedListNode* prev = head;
+        SinglyLinkedListNode* current = head->next;
+        bool inserted = false;
+        
+        int minVal = head->data;
+        int maxVal = head->data;
+        
+        do {
+            if (insertVal >= prev->data && insertVal <= current->data) {
+                // Insert the new node between prev and current
+                prev->next = new SinglyLinkedListNode(insertVal, current);
+                inserted = true;
+                break;
+            }
+            
+            minVal = min(minVal, current->data);
+            maxVal = max(maxVal, current->data);
+            
+            prev = current;
+            current = current->next;
+        } while (current != head);
+        
+        if (!inserted) {
+            // Insert the new node at the end
+            prev->next = new SinglyLinkedListNode(insertVal, current);
+        }
+        
+        return head;
+	}
+};
