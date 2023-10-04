@@ -1,0 +1,94 @@
+A trie (pronounced as "try") or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings.
+There are various applications of this data structure, such as autocomplete and spellchecker.
+
+Implement the Trie class:
+
+Trie() Initializes the trie object.
+void insert(String word) Inserts the string word into the Trie.
+int countWordsEqualTo(String word) return count of string word occurs till now in Trie.
+int countWordsStartingWith(String word) returns how many words has prefix of word.
+void erase(String word) removes 1 occurence of word from Trie.
+Example 1:
+
+Input: 
+ ["Trie","insert","insert","countWordsEqualTo","countWordsStartingWith","erase"]
+ [[], ["coding"], ["ninja"], ["coding"], ["nin"], ["coding"]]Output: [null, null, null, 1, 1, null]
+Explanation: 
+Constraints:
+
+1 <= word.length, prefix.length <= 2000
+word and prefix consist only of lowercase English letters.
+At most  calls in total will be made to insert, search, and startsWith.
+
+
+Code:
+=====
+
+class Node {
+	public:
+		Node* children[26];
+		int wordCount = 0;
+		int PrefixCount = 0;
+};
+
+class Trie {
+public:
+	Node* root;
+	Trie() {
+		root = new Node();
+	}
+
+	void insert(string word) {
+		Node* temp = root;
+
+		for(int i = 0; i < word.size(); i++) {
+			int childIndex = word[i] - 'a';
+			if(temp -> children[childIndex] == NULL) {
+				temp -> children[childIndex] = new Node();
+			}
+			temp = temp -> children[childIndex];
+			temp -> PrefixCount++;
+		}
+		temp -> wordCount++;
+	}
+
+	int countWordsEqualTo(string word) {
+		Node* temp = root;
+
+		for(int i = 0; i < word.size(); i++) {
+			int childIndex = word[i] - 'a';
+			if(temp -> children[childIndex] == NULL) {
+				return 0;
+			}
+			temp = temp -> children[childIndex];
+		}
+		return temp -> wordCount;
+	}
+
+	int countWordsStartingWith(string word) {
+		Node* temp = root;
+
+		for(int i = 0; i < word.size(); i++) {
+			int childIndex = word[i] - 'a';
+			if(temp -> children[childIndex] == NULL) {
+				return 0;
+			}
+			temp = temp -> children[childIndex];
+		}
+		return temp -> PrefixCount;
+	}
+
+	void erase(string word) {
+		Node* temp = root; 
+
+		for(int i = 0; i < word.size(); i++) {
+			int childIndex = word[i] - 'a';
+			if(temp -> children[childIndex] == NULL) {
+				return ;
+			}
+			temp = temp -> children[childIndex];
+			temp -> PrefixCount--;
+		}
+		temp -> wordCount--;
+	}
+}
